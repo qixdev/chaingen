@@ -37,17 +37,8 @@
         <p>Ready to see the magic happen? Enter your prompt and click below to generate your personalized blockchain script.</p>
         <form action="{{ url_for('download') }}" method="post">
             <textarea name="prompt" id="userPrompt" placeholder="Enter your prompt here"></textarea>
-        <button onclick="generateScript()">Get Started</button>
+        <button>Get Started</button>
         </form>
     </section>
-
-    <script>
-        function generateScript() {
-            // Add your script generation logic here based on the user's input
-            var userPrompt = document.getElementById('userPrompt').value;
-            // Example: Display the prompt for now
-            alert('Generated Script:\n' + userPrompt);
-        }
-    </script>
 </body>
 </html>
