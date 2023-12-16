@@ -87,6 +87,8 @@ button:hover {
     background-color: #333;
     border-radius: 5px;
     margin-bottom: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .script a {
