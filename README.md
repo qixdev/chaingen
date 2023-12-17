@@ -2,21 +2,21 @@
 
 ## Project name
 
-[Project name]
+Chaingen
 
 ## Selected problem
 
-[Problem name]
+LLM-generated blockchain node deployment script
 
 ## Team name
 
-[Your team name]
+DNA
 
 ## Participants
 
+* Full name: Danial Baitakov. Email: 230408@astanait.edu.kz
 * Full name: [Full name]. Email: [Email]
-* Full name: [Full name]. Email: [Email]
-* Full name: [Full name]. Email: [Email]
+* Full name: Ansar Shangilov. Email: 230720@astanait.edu.kz
 
 ## Abstract
 
@@ -30,7 +30,8 @@
 
 ### Prerequisites:
 
-[List any software or tools that need to be installed before running your project.]
+- Python 3.10+
+- Flask
 
 ### Running
 
