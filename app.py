@@ -6,9 +6,11 @@ import shlex
 app = Flask(__name__)
 client = OpenAI(api_key="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")
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/download', methods=['POST', 'GET'])
 def download():
@@ -25,7 +27,7 @@ def download():
         }],
         model="gpt-4",
         )
-        completion = response.parse()     # get the object that `chat.completions.create()` would have returned
+        completion = response.parse()
         otvet = completion.choices[0].message.content
         print(otvet)
         escaped = shlex.quote(otvet)
@@ -36,11 +38,28 @@ def download():
         return render_template('download.html')
     else:
         print("asdfasdf")
+
+
 @app.route(f'/download/script')
 def download_script():
     print(iter)
     path = "./script.sh"
     return send_file(path, as_attachment=True)
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
+@app.route('/contacts')
+def contacts():
+    return render_template('contacts.html')
+
+
+@app.errorhandler(404) 
+def not_found(e): 
+    return render_template("404.html") 
     
 
 if __name__ == '__main__':
