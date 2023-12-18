@@ -9,7 +9,7 @@ body {
 header {
     background-color: #333;
     color: #fff;
-    padding: 20px;
+    padding: 5px;
     text-align: center;
 }
 
@@ -38,6 +38,7 @@ section {
 
 h2 {
     color: #fff;
+    margin: -3px 0 0 0;
 }
 
 p {
@@ -104,4 +105,32 @@ button:hover {
 .source-code a {
     color: #fff;
     text-decoration: none;
+}
+
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.contact {
+    width: calc(30% - 20px);
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #333;
+    border-radius: 8px;
+}
+
+.contact img {
+    width: 150px;
+    height: 150px; 
+    object-fit: cover; 
+    margin-bottom: 10px;
+}
+
+.contact a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
 }

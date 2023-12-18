@@ -19,24 +19,20 @@
     </nav>
 
     <section>
+        {% if status %}
         <div class="script-container">
-            I am sorry I don't get your question. Can you provide more information?
             <div class="script">
                 <h2>Bash Script</h2>
                 <p>Download the Bash script for your blockchain project:</p>
-                <a href="#" download="../script.sh">Download Bash Script</a>
+                <a href="{{ url_for('download_script', script_number=iter)}}" download>Download Bash Script</a>
             </div>
-
-            <!-- <div class="script">
-                <h2>Golang Script</h2>
-                <p>Download the Golang script for your blockchain project:</p>
-                <a href="#" download="chaingen_script.go">Download Golang Script</a>
-            </div> -->
         </div>
-
+        {% else %}
+        <h2 style="text-align: center;">asdf I am sorry I don't get your question. Can you provide more information?</h2>
+        {% endif %}
         <div class="source-code">
-            <p>For the source code of this page, visit:</p>
-            <a href="#" target="_blank">https://github.com/yourusername/chaingen-scripts</a>
+            <p>For the source code of this project, visit:</p>
+            <a href="https://github.com/qixdev/chaingen" target="_blank">https://github.com/qixdev/chaingen</a>
         </div>
     </section>
 </body>
