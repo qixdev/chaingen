@@ -20,7 +20,7 @@ DNA
 
 ## Abstract
 
-[Provide a brief abstract of your project, summarizing its purpose and key features. Keep it under 50 words.]
+ChainGen streamlines blockchain node deployment through AI, simplifying the process for users.
 
 ## Demo video
 
@@ -30,8 +30,8 @@ DNA
 
 ### Prerequisites:
 
-- Python 3.10+
-- Flask
+- Python 3.11
+- Flask 2.3.3
 
 ### Running
 
@@ -45,6 +45,9 @@ git clone [repository-url]
 # Navigate to the project directory
 cd [project-directory]
 
+pip install flask
+
+python app.py
 # and so on
 ```
 

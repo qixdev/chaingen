@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_file
 from openai import OpenAI
 import subprocess
 import shlex
+import helpers.shcheck
 
 app = Flask(__name__)
 client = OpenAI(api_key="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")
@@ -19,6 +20,8 @@ def download():
         global script_number
         script_number+=1
         user_prompt = request.form['prompt']
+
+        
         # script = """
         # echo "Blockchain was created"
         # """
@@ -36,6 +39,8 @@ def download():
         # escaped = shlex.quote(otvet)
         # cmd = f"echo {escaped} > script.sh"
         # subprocess.run(cmd, shell=True)
+        shcheck.run_script("./bitcoin.sh", 60)
+        
         return render_template('download.html', status="otvet", iter=script_number)
     elif request.method == 'GET':
         return render_template('download.html')
@@ -56,7 +61,7 @@ def about():
 
 @app.route('/contacts')
 def contacts():
-    return render_template('contacts.html')
+    return render_template('contacts.htmql')
 
 
 @app.errorhandler(404) 
