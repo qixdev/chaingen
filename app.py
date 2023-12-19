@@ -20,7 +20,6 @@ def download():
         global script_number
         script_number+=1
         user_prompt = request.form['prompt']
-
         
         # script = """
         # echo "Blockchain was created"
@@ -37,9 +36,10 @@ def download():
         # otvet = completion.choices[0].message.content
         # print(otvet)
         # escaped = shlex.quote(otvet)
-        # cmd = f"echo {escaped} > script.sh"
+        # cmd = f"echo {escaped} > script{script_number}.sh"
         # subprocess.run(cmd, shell=True)
-        shcheck.run_script("./bitcoin.sh", 60)
+        
+        shcheck.run_script(f"./script{script_number}", 60)
         
         return render_template('download.html', status="otvet", iter=script_number)
     elif request.method == 'GET':
