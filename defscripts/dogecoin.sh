@@ -64,35 +64,48 @@ elif [[ "$(uname)" == "MINGW"* || "$(uname)" == "CYGWIN"* ]]; then
 # macOS
 
 elif [[ "$(uname)" == "Darwin" ]]; then
-    echo "[ChainGen] Deploying a node on macOS."
-    DOGECOIN_INSTALL_DIR="$HOME/bitcoin"
+	# Dogecoin Core installation directory
+	DOGECOIN_INSTALL_DIR="$HOME/Dogecoin"
+	
+	# Create Dogecoin installation directory if it doesn't exist
+	mkdir -p "$DOGECOIN_INSTALL_DIR"
+	
+	# Download and install Dogecoin Core
+	DOGECOIN_CORE_URL="https://github.com/dogecoin/dogecoin/releases/download/v1.14.6/dogecoin-1.14.6-osx-signed.dmg"
+	DOGECOIN_CORE_DMG="$DOGECOIN_INSTALL_DIR/dogecoin-core.dmg"
+	
+	echo "Downloading Dogecoin Core..."
+	curl -L -o "$DOGECOIN_CORE_DMG" "$DOGECOIN_CORE_URL"
+	
+	# Mount the DMG file
+	hdiutil attach "$DOGECOIN_CORE_DMG"
+	
+	# Copy the Dogecoin Core app to the Applications directory
+	cp -R "/Volumes/Dogecoin Core/Dogecoin-Qt.app" "/Applications/"
+	
+	# Unmount the DMG file
+	hdiutil detach "/Volumes/Dogecoin Core"
+	
+	# Create Dogecoin data directory
+	DOGECOIN_DATA_DIR="$HOME/Library/Application Support/Dogecoin"
+	mkdir -p "$DOGECOIN_DATA_DIR"
+	
+	# Create Dogecoin configuration file
+	DOGECOIN_CONF_FILE="$DOGECOIN_DATA_DIR/dogecoin.conf"
+	echo "server=1" > "$DOGECOIN_CONF_FILE"
+	echo "rpcuser=yourusername" >> "$DOGECOIN_CONF_FILE"
+	echo "rpcpassword=yourpassword" >> "$DOGECOIN_CONF_FILE"
+	
+	echo "Dogecoin Core is installed in /Applications"
+	echo "Starting Dogecoin Core..."
+	
+	# Start Dogecoin Core
+	open -a "/Applications/Dogecoin-Qt.app" --args -datadir="$DOGECOIN_DATA_DIR"
+	
+	# Keep the terminal open
+	read -p "Press Enter to exit..."
+	exit 0
 
-    # Create installation directory
-    mkdir -p "$DOGECOIN_INSTALL_DIR" || display_error_and_exit "Failed to create installation directory."
-
-    # Download Dogecoin Core tarball (replace the URL with the actual tarball URL)
-    DOGECOIN_CORE_URL="https://bitcoincore.org/bin/bitcoin-core-26.0/bitcoin-26.0-x86_64-osx.tar.gz"
-    DOGECOIN_CORE_TAR="$DOGECOIN_INSTALL_DIR/bitcoin-core.tar.gz"
-    echo "Downloading Dogecoin Core..."
-    curl -o "$DOGECOIN_CORE_TAR" "$DOGECOIN_CORE_URL" || display_error_and_exit "Failed to download Dogecoin Core."
-
-    echo "Extracting Dogecoin Core..."
-    tar -xzf "$DOGECOIN_CORE_TAR" -C "$DOGECOIN_INSTALL_DIR" --strip-components=1 || display_error_and_exit "Failed to extract Dogecoin Core."
-    rm "$DOGECOIN_CORE_TAR"
-
-    DOGECOIN_DATA_DIR="$HOME/bitcoin-data"
-    mkdir -p "$DOGECOIN_DATA_DIR" || display_error_and_exit "Failed to create data directory."
-
-    DOGECOIN_CONF_FILE="$DOGECOIN_DATA_DIR/dogecoin.conf"
-    echo "server=1" > "$DOGECOIN_CONF_FILE"
-    echo "rpcuser=yourusername" >> "$DOGECOIN_CONF_FILE"
-    echo "rpcpassword=yourpassword" >> "$DOGECOIN_CONF_FILE"
-
-    "$DOGECOIN_INSTALL_DIR/dogecoin-qt" -datadir="$DOGECOIN_DATA_DIR" || display_error_and_exit "Failed to start Dogecoin Core."
-
-    echo "Dogecoin Core deployed successfully."
-    read -p "Press Enter to exit..."
-    exit 
 else
     echo "Unsupported operating system."
 fi
