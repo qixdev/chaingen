@@ -2,11 +2,35 @@ from flask import Flask, render_template, request, send_file
 from openai import OpenAI
 import subprocess
 import shlex
-import helpers.shcheck
+from helpers.config import API_KEY
+
 
 app = Flask(__name__)
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=API_KEY)
 script_number=1
+
+
+
+def readDefaultScript(filename):
+    with open(filename) as f:
+        script = f.readlines()
+    return script
+
+def run_script(script_path, timeout_seconds):
+    try:
+        default = subprocess.check_output(["netstat", "-tuln"])
+        script_path_escaped = shlex.quote(script_path)
+        command = f"bash {script_path_escaped}"
+        process = subprocess.Popen(command, shell=True, executable="/bin/bash")
+        process.communicate(timeout=timeout_seconds)
+    except subprocess.TimeoutExpired:
+        afterwards = subprocess.check_output(["netstat", "-tuln"])
+        process.terminate()
+        #nodestat = subprocess.check_output("./portcheck.sh")      
+        return not (default == afterwards)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
 
 
 @app.route('/')
@@ -20,37 +44,46 @@ def download():
         global script_number
         script_number+=1
         user_prompt = request.form['prompt']
-        
-        # script = """
-        # echo "Blockchain was created"
-        # """
-        # initial = f"""I need a ready-made bash script created according to this documentation for deploying a node on my computer: {user_prompt}. If you need tools in the provided documentation, enter their installation in the script if the operating system is Linux. If not, then print that they are not installed. If there are no scripts in the submitted documentation, change this script to meet the criteria of the documentation: {script}. Provide only scripts itself, because I am going to write your response to bash file and your text can cause error."""
-        # response = client.chat.completions.with_raw_response.create(
-        # messages=[{
-        #     "role": "user",
-        #     "content": initial,
-        # }],
-        # model="gpt-4",
-        # )
-        # completion = response.parse()
-        # otvet = completion.choices[0].message.content
-        # print(otvet)
-        # escaped = shlex.quote(otvet)
-        # cmd = f"echo {escaped} > script{script_number}.sh"
-        # subprocess.run(cmd, shell=True)
-        
-        shcheck.run_script(f"./script{script_number}", 60)
-        
-        return render_template('download.html', status="otvet", iter=script_number)
+        iter=0
+        while iter<3:
+            iter+=1 
+            response = client.chat.completions.with_raw_response.create(
+            messages=[{
+            "role": "system", 
+            "content": "You generate single bash script for blockchain nodes deployment without printing other information because it will be easier for me to parse your response if there is no other information besides script."
+            }, 
+            {"role": "user", 
+            "content": f"Write me bash script based on this documentation.{user_prompt}. Your scripts based on user's prompt and his desires, but you always should generate a single bash script. Your bash script should work on Windows, Linux and MacOS. You should download tools for deploying node using curl or wget. You should provide only script, no any instruction how to run it, just script, nothing else. User can provide documentation that can have bash commands directly and can have undirected operations that should be made with bash like \" create folder called X\" and you have to assemble that documentation into bash script. If user documentation doesn't have commands and instructions to include in bash script, find out what blockchain he wants and build a script yourself. Sample script for you {readDefaultScript('./defscripts/bitcoin.sh')}. Provide script without ```bash ```"}],
+            model="gpt-4-1106-preview",
+            temperature=0.1,
+            #seed=42,
+            top_p=0.1
+            )
+            completion = response.parse()     # get the object that `chat.completions.create()` would have returned
+            otvet = completion.choices[0].message.content
+            print(otvet)
+            escaped = shlex.quote(otvet)
+            cmd = f"echo {escaped} > script{script_number}.sh"
+            subprocess.run(cmd, shell=True)
+            cmd = f"mv script{script_number}.sh genscripts/"
+            subprocess.run(cmd, shell=True)
+            subprocess.run("chmod +x *", shell=True)
+            if run_script(f"./genscripts/script{script_number}.sh", 60):
+                print("checkwork")
+                subprocess.run('pkill -f "$BITCOIN_INSTALL_DIR/bin/bitcoin-qt"', shell=True)
+                return render_template('download.html', status="otvet", iter=script_number)
+                break
+        subprocess.run('pkill -f "$BITCOIN_INSTALL_DIR/bin/bitcoin-qt"', shell=True)
+        return render_template('retry.html')
     elif request.method == 'GET':
         return render_template('download.html')
     else:
-        print("asdfasdf")
+        return render_template('404.html')
 
 
 @app.route(f'/download/script/<int:script_number>')
 def download_script(script_number):
-    path = f"scripts/script{script_number}.sh"
+    path = f"./genscripts/script{script_number}.sh"
     return send_file(path, as_attachment=True)
 
 
