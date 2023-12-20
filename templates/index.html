@@ -24,21 +24,27 @@
             <li>Enter your prompt in the text area below.</li>
             <li>Watch as Chaingen.com transforms your idea into a robust blockchain script.</li>
             <li>Copy and implement the script into your blockchain project.</li>
-        </ol>
-
-        <!-- <h2>Why Choose Chaingen.com?</h2>
-        <ul>
-            <li>User-friendly interface</li>
-            <li>Efficient script generation</li>
-            <li>Tailored solutions for your blockchain projects</li>
-        </ul> -->   
-
+        </ol>   
         <h2>Get Started:</h2>
         <p>Ready to see the magic happen? Enter your prompt and click below to generate your personalized blockchain script.</p>
-        <form action="{{ url_for('download') }}" method="post">
+        <form action="{{ url_for('download') }}" method="post" onsubmit="showLoading()">
             <textarea name="prompt" id="userPrompt" placeholder="Enter your prompt here"></textarea>
-        <button>Get Started</button>
+            <button id="getStartedBtn">Get Started</button>
         </form>
+
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <p>Loading...</p>
+        </div>
     </section>
+
+    <script>
+        function showLoading() {
+            var loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'flex';
+            var getStartedBtn = document.getElementById('getStartedBtn');
+            getStartedBtn.disabled = true;
+        }
+    </script>
 </body>
 </html>
