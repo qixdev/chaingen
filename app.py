@@ -61,7 +61,7 @@ def download():
             )
             completion = response.parse()     # get the object that `chat.completions.create()` would have returned
             otvet = completion.choices[0].message.content
-            print(otvet)
+            # print(otvet)
             escaped = shlex.quote(otvet)
             cmd = f"echo {escaped} > script{script_number}.sh"
             subprocess.run(cmd, shell=True)
@@ -75,7 +75,7 @@ def download():
                 subprocess.run('pkill -f /home/debyte/bin/dogecoind', shell=True)
                 subprocess.run('pkill -f "$HOME/ethereum/geth"', shell=True)
                 subprocess.run('pkill -f "$BITCOIN_INSTALL_DIR/bin/bitcoin-qt"', shell=True)
-                print("checkwork")
+                print("[ChainGen] Script is correct.")
                 return render_template('download.html', status="otvet", iter=script_number)
                 break
         return render_template('retry.html')
