@@ -24,7 +24,7 @@ ChainGen simplifies setting up blockchain nodes with smart technology, saving ti
 
 ## Demo video
 
-[Link to a demo video showcasing your project, if any. Ensure it is less than 3 minutes long.]
+https://www.youtube.com/watch?v=RYKWCrXwfMs
 
 ## How to run
 
