@@ -26,9 +26,14 @@
                 <p>Download the Bash script for your blockchain project:</p>
                 <a href="{{ url_for('download_script', script_number=iter)}}" download>Download Bash Script</a>
             </div>
+            <div>
+                <h3>
+                    Run `chmod +x [script name]` before running the script on Linux
+                </h3>
+            </div>
         </div>
         {% else %}
-        <h2 style="text-align: center;">asdf I am sorry I don't get your question. Can you provide more information?</h2>
+        <h2 style="text-align: center;">You send request with no prompt, please go back to home page.</h2>
         {% endif %}
         <div class="source-code">
             <p>For the source code of this project, visit:</p>

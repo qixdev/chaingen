@@ -53,7 +53,7 @@ def download():
             "content": "You generate single bash script for blockchain nodes deployment without printing other information because it will be easier for me to parse your response if there is no other information besides script."
             }, 
             {"role": "user", 
-            "content": f"Write me bash script based on this documentation.{user_prompt}. Your scripts based on user's prompt and his desires, but you always should generate a single bash script. Your bash script should work on Windows, Linux and MacOS. You should download tools for deploying node using curl or wget. You should provide only script, no any instruction how to run it, just script, nothing else. User can provide documentation that can have bash commands directly and can have undirected operations that should be made with bash like \" create folder called X\" and you have to assemble that documentation into bash script. If user documentation doesn't have commands and instructions to include in bash script, find out what blockchain he wants and build a script yourself. Sample script for you {readDefaultScript('./defscripts/bitcoin.sh')}. Provide script without ```bash ```"}],
+            "content": f"Write me bash script based on this documentation.{user_prompt}. Your scripts based on user's prompt and his desires, but you always should generate a single bash script. Your bash script should work on Windows, Linux and MacOS. You should download tools for deploying node using curl or wget. You should provide only script, no any instruction how to run it, just script, nothing else. User can provide documentation that can have bash commands directly and can have undirected operations that should be made with bash like \" create folder called X\" and you have to assemble that documentation into bash script. If user documentation doesn't have commands and instructions to include in bash script, find out what blockchain he wants and build a script yourself. Sample scripts for you Bitcoin:{readDefaultScript('./defscripts/bitcoin.sh')}; Ethereum: {readDefaultScript('./defscripts/ethereum.sh')}; Dogecoin: {readDefaultScript('./defscripts/dogecoin.sh')} Do not use dogecoind, use only dogecoin-qt; Litecoin: {readDefaultScript('./defscripts/litecoin.sh')}. If user's documentation contains that sample scripts, just it back, DON'T CHANGE IT. Provide script without ```bash ```"}],
             model="gpt-4-1106-preview",
             temperature=0.1,
             #seed=42,
@@ -69,11 +69,15 @@ def download():
             subprocess.run(cmd, shell=True)
             subprocess.run("chmod +x *", shell=True)
             if run_script(f"./genscripts/script{script_number}.sh", 60):
-                print("checkwork")
                 subprocess.run('pkill -f "$BITCOIN_INSTALL_DIR/bin/bitcoin-qt"', shell=True)
+                subprocess.run('pkill -f "$DOGECOIN_INSTALL_DIR/bin/dogecoin-qt"', shell=True)
+                subprocess.run('pkill -f "$LITECOIN_INSTALL_DIR/bin/litecoin-qt"', shell=True)
+                subprocess.run('pkill -f /home/debyte/bin/dogecoind', shell=True)
+                subprocess.run('pkill -f "$HOME/ethereum/geth"', shell=True)
+                subprocess.run('pkill -f "$BITCOIN_INSTALL_DIR/bin/bitcoin-qt"', shell=True)
+                print("checkwork")
                 return render_template('download.html', status="otvet", iter=script_number)
                 break
-        subprocess.run('pkill -f "$BITCOIN_INSTALL_DIR/bin/bitcoin-qt"', shell=True)
         return render_template('retry.html')
     elif request.method == 'GET':
         return render_template('download.html')

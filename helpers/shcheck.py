@@ -14,7 +14,7 @@ def run_script(script_path, timeout_seconds):
         afterwards = subprocess.check_output(["netstat", "-tuln"])
         process.terminate()
         #nodestat = subprocess.check_output("./portcheck.sh")      
-        return default = afterwards
+        return not (default == afterwards)
     except Exception as e:
         print(f"An error occurred: {e}")
 
