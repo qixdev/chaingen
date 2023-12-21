@@ -57,6 +57,9 @@ nano .env
 # Run the application
 python app.py
 ```
+## Supported blockchains
+
+Currently ChainGen supports only Bitcoin, Ethereum, Litecoin and Dogecoin.
 
 ## Inspirations
 
