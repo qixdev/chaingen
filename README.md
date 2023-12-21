@@ -47,7 +47,7 @@ cd chaingen
 # Install all dependencies
 python3 -m venv .venv
 source .venv/bin/activate
-python3 -m pip install -r requirements.txt
+python3 -m pip install flask openai python-dotenv
 
 # Setup your api key
 # Create a file called .env
